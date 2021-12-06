@@ -13,6 +13,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -44,6 +45,7 @@ public class PocketDimentionsModElements {
 	public final List<Supplier<EntityType<?>>> entities = new ArrayList<>();
 	public final List<Supplier<Enchantment>> enchantments = new ArrayList<>();
 	public static Map<ResourceLocation, net.minecraft.util.SoundEvent> sounds = new HashMap<>();
+
 	public PocketDimentionsModElements() {
 		try {
 			ModFileScanData modFileInfo = ModList.get().getModFileById("pocket_dimentions").getFile().getScanResult();
@@ -60,13 +62,16 @@ public class PocketDimentionsModElements {
 		}
 		Collections.sort(elements);
 		elements.forEach(PocketDimentionsModElements.ModElement::initElements);
+		MinecraftForge.EVENT_BUS.register(new PocketDimentionsModVariables(this));
 	}
 
 	public void registerSounds(RegistryEvent.Register<net.minecraft.util.SoundEvent> event) {
 		for (Map.Entry<ResourceLocation, net.minecraft.util.SoundEvent> sound : sounds.entrySet())
 			event.getRegistry().register(sound.getValue().setRegistryName(sound.getKey()));
 	}
+
 	private int messageID = 0;
+
 	public <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, PacketBuffer> encoder, Function<PacketBuffer, T> decoder,
 			BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
 		PocketDimentionsMod.PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
@@ -92,12 +97,15 @@ public class PocketDimentionsModElements {
 	public List<Supplier<Enchantment>> getEnchantments() {
 		return enchantments;
 	}
+
 	public static class ModElement implements Comparable<ModElement> {
 		@Retention(RetentionPolicy.RUNTIME)
 		public @interface Tag {
 		}
+
 		protected final PocketDimentionsModElements elements;
 		protected final int sortid;
+
 		public ModElement(PocketDimentionsModElements elements, int sortid) {
 			this.elements = elements;
 			this.sortid = sortid;

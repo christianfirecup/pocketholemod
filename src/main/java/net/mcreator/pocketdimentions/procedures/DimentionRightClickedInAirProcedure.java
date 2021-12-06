@@ -24,19 +24,20 @@ import net.mcreator.pocketdimentions.PocketDimentionsMod;
 import java.util.Map;
 
 public class DimentionRightClickedInAirProcedure {
+
 	public static void executeProcedure(Map<String, Object> dependencies) {
-		if (dependencies.get("entity") == null) {
-			if (!dependencies.containsKey("entity"))
-				PocketDimentionsMod.LOGGER.warn("Failed to load dependency entity for procedure DimentionRightClickedInAir!");
-			return;
-		}
 		if (dependencies.get("world") == null) {
 			if (!dependencies.containsKey("world"))
 				PocketDimentionsMod.LOGGER.warn("Failed to load dependency world for procedure DimentionRightClickedInAir!");
 			return;
 		}
-		Entity entity = (Entity) dependencies.get("entity");
+		if (dependencies.get("entity") == null) {
+			if (!dependencies.containsKey("entity"))
+				PocketDimentionsMod.LOGGER.warn("Failed to load dependency entity for procedure DimentionRightClickedInAir!");
+			return;
+		}
 		IWorld world = (IWorld) dependencies.get("world");
+		Entity entity = (Entity) dependencies.get("entity");
 		{
 			Entity _ent = entity;
 			if (!_ent.world.isRemote && _ent instanceof ServerPlayerEntity) {

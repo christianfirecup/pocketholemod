@@ -47,6 +47,7 @@ public class PocketDimentionsMod {
 			new ResourceLocation("pocket_dimentions", "pocket_dimentions"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	public PocketDimentionsModElements elements;
+
 	public PocketDimentionsMod() {
 		elements = new PocketDimentionsModElements();
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
@@ -87,8 +88,10 @@ public class PocketDimentionsMod {
 	public void registerSounds(RegistryEvent.Register<net.minecraft.util.SoundEvent> event) {
 		elements.registerSounds(event);
 	}
+
 	private static class PocketDimentionsModFMLBusEvents {
 		private final PocketDimentionsMod parent;
+
 		PocketDimentionsModFMLBusEvents(PocketDimentionsMod parent) {
 			this.parent = parent;
 		}

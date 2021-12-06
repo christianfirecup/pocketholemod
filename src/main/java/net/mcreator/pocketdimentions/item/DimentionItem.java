@@ -16,13 +16,16 @@ import net.minecraft.block.BlockState;
 import net.mcreator.pocketdimentions.procedures.DimentionRightClickedInAirProcedure;
 import net.mcreator.pocketdimentions.PocketDimentionsModElements;
 
+import java.util.stream.Stream;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.AbstractMap;
 
 @PocketDimentionsModElements.ModElement.Tag
 public class DimentionItem extends PocketDimentionsModElements.ModElement {
 	@ObjectHolder("pocket_dimentions:dimention")
 	public static final Item block = null;
+
 	public DimentionItem(PocketDimentionsModElements instance) {
 		super(instance, 2);
 	}
@@ -31,6 +34,7 @@ public class DimentionItem extends PocketDimentionsModElements.ModElement {
 	public void initElements() {
 		elements.items.add(() -> new ItemCustom());
 	}
+
 	public static class ItemCustom extends Item {
 		public ItemCustom() {
 			super(new Item.Properties().group(ItemGroup.MISC).maxStackSize(1).isImmuneToFire().rarity(Rarity.COMMON));
@@ -59,15 +63,10 @@ public class DimentionItem extends PocketDimentionsModElements.ModElement {
 			double x = entity.getPosX();
 			double y = entity.getPosY();
 			double z = entity.getPosZ();
-			{
-				Map<String, Object> $_dependencies = new HashMap<>();
-				$_dependencies.put("entity", entity);
-				$_dependencies.put("x", x);
-				$_dependencies.put("y", y);
-				$_dependencies.put("z", z);
-				$_dependencies.put("world", world);
-				DimentionRightClickedInAirProcedure.executeProcedure($_dependencies);
-			}
+
+			DimentionRightClickedInAirProcedure
+					.executeProcedure(Stream.of(new AbstractMap.SimpleEntry<>("world", world), new AbstractMap.SimpleEntry<>("entity", entity))
+							.collect(HashMap::new, (_m, _e) -> _m.put(_e.getKey(), _e.getValue()), Map::putAll));
 			return ar;
 		}
 	}
