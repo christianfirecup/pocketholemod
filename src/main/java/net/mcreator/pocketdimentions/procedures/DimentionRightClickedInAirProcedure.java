@@ -1,11 +1,16 @@
 package net.mcreator.pocketdimentions.procedures;
 
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.Mirror;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
 import net.minecraft.network.play.server.SPlaySoundEventPacket;
@@ -25,7 +30,13 @@ public class DimentionRightClickedInAirProcedure {
 				PocketDimentionsMod.LOGGER.warn("Failed to load dependency entity for procedure DimentionRightClickedInAir!");
 			return;
 		}
+		if (dependencies.get("world") == null) {
+			if (!dependencies.containsKey("world"))
+				PocketDimentionsMod.LOGGER.warn("Failed to load dependency world for procedure DimentionRightClickedInAir!");
+			return;
+		}
 		Entity entity = (Entity) dependencies.get("entity");
+		IWorld world = (IWorld) dependencies.get("world");
 		{
 			Entity _ent = entity;
 			if (!_ent.world.isRemote && _ent instanceof ServerPlayerEntity) {
@@ -41,6 +52,16 @@ public class DimentionRightClickedInAirProcedure {
 					}
 					((ServerPlayerEntity) _ent).connection.sendPacket(new SPlaySoundEventPacket(1032, BlockPos.ZERO, 0, false));
 				}
+			}
+		}
+		if (world instanceof ServerWorld) {
+			Template template = ((ServerWorld) world).getStructureTemplateManager()
+					.getTemplateDefaulted(new ResourceLocation("pocket_dimentions", "humblecottage"));
+			if (template != null) {
+				template.func_237144_a_((ServerWorld) world,
+						new BlockPos((int) (entity.getPosX()), (int) (entity.getPosY()), (int) (entity.getPosZ())),
+						new PlacementSettings().setRotation(Rotation.CLOCKWISE_90).setMirror(Mirror.NONE).setChunk(null).setIgnoreEntities(false),
+						((World) world).rand);
 			}
 		}
 	}
