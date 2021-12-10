@@ -43,8 +43,6 @@ public class PocketPlayerEntersDimensionProcedure {
 		IWorld world = (IWorld) dependencies.get("world");
 		Entity entity = (Entity) dependencies.get("entity");
 		if (PocketDimentionsModVariables.WorldVariables.get(world).firstenter == false) {
-			PocketDimentionsModVariables.WorldVariables.get(world).firstenter = (boolean) (true);
-			PocketDimentionsModVariables.WorldVariables.get(world).syncData(world);
 			if (world instanceof ServerWorld) {
 				Template template = ((ServerWorld) world).getStructureTemplateManager()
 						.getTemplateDefaulted(new ResourceLocation("pocket_dimentions", "nexustest"));
@@ -76,15 +74,9 @@ public class PocketPlayerEntersDimensionProcedure {
 					((ServerPlayerEntity) _ent).connection.setPlayerLocation(0, 2, 0, _ent.rotationYaw, _ent.rotationPitch, Collections.emptySet());
 				}
 			}
-			{
-				boolean _setval = (boolean) (false);
-				entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.timer = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
-		}
-		if (PocketDimentionsModVariables.WorldVariables.get(world).firstenter == true) {
+			PocketDimentionsModVariables.WorldVariables.get(world).firstenter = (boolean) (true);
+			PocketDimentionsModVariables.WorldVariables.get(world).syncData(world);
+		} else if (PocketDimentionsModVariables.WorldVariables.get(world).firstenter == true) {
 			{
 				Entity _ent = entity;
 				_ent.setPositionAndUpdate(0, 5, 0);

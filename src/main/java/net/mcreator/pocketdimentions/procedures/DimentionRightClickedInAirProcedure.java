@@ -7,7 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.IWorld;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +17,6 @@ import net.minecraft.network.play.server.SPlaySoundEventPacket;
 import net.minecraft.network.play.server.SPlayEntityEffectPacket;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
 
 import net.mcreator.pocketdimentions.PocketDimentionsModVariables;
@@ -84,63 +82,56 @@ public class DimentionRightClickedInAirProcedure {
 						}
 					}
 				}
-				if ((entity.world.getDimensionKey()) == (RegistryKey.getOrCreateKey(Registry.WORLD_KEY,
-						new ResourceLocation("pocket_dimentions:pocket")))) {
-					{
-						Entity _ent = entity;
-						if (!_ent.world.isRemote && _ent instanceof ServerPlayerEntity) {
-							RegistryKey<World> destinationType = World.OVERWORLD;
-							ServerWorld nextWorld = _ent.getServer().getWorld(destinationType);
-							if (nextWorld != null) {
-								((ServerPlayerEntity) _ent).connection
-										.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.field_241768_e_, 0));
-								((ServerPlayerEntity) _ent).teleport(nextWorld, nextWorld.getSpawnPoint().getX(),
-										nextWorld.getSpawnPoint().getY() + 1, nextWorld.getSpawnPoint().getZ(), _ent.rotationYaw, _ent.rotationPitch);
-								((ServerPlayerEntity) _ent).connection.sendPacket(new SPlayerAbilitiesPacket(((ServerPlayerEntity) _ent).abilities));
-								for (EffectInstance effectinstance : ((ServerPlayerEntity) _ent).getActivePotionEffects()) {
-									((ServerPlayerEntity) _ent).connection
-											.sendPacket(new SPlayEntityEffectPacket(_ent.getEntityId(), effectinstance));
-								}
-								((ServerPlayerEntity) _ent).connection.sendPacket(new SPlaySoundEventPacket(1032, BlockPos.ZERO, 0, false));
+			} else if ((entity.world.getDimensionKey()) == (RegistryKey.getOrCreateKey(Registry.WORLD_KEY,
+					new ResourceLocation("pocket_dimentions:pocket")))) {
+				{
+					Entity _ent = entity;
+					if (!_ent.world.isRemote && _ent instanceof ServerPlayerEntity) {
+						RegistryKey<World> destinationType = World.OVERWORLD;
+						ServerWorld nextWorld = _ent.getServer().getWorld(destinationType);
+						if (nextWorld != null) {
+							((ServerPlayerEntity) _ent).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.field_241768_e_, 0));
+							((ServerPlayerEntity) _ent).teleport(nextWorld, nextWorld.getSpawnPoint().getX(), nextWorld.getSpawnPoint().getY() + 1,
+									nextWorld.getSpawnPoint().getZ(), _ent.rotationYaw, _ent.rotationPitch);
+							((ServerPlayerEntity) _ent).connection.sendPacket(new SPlayerAbilitiesPacket(((ServerPlayerEntity) _ent).abilities));
+							for (EffectInstance effectinstance : ((ServerPlayerEntity) _ent).getActivePotionEffects()) {
+								((ServerPlayerEntity) _ent).connection.sendPacket(new SPlayEntityEffectPacket(_ent.getEntityId(), effectinstance));
 							}
+							((ServerPlayerEntity) _ent).connection.sendPacket(new SPlaySoundEventPacket(1032, BlockPos.ZERO, 0, false));
 						}
 					}
-					{
-						Entity _ent = entity;
-						_ent.setPositionAndUpdate(
+				}
+				{
+					Entity _ent = entity;
+					_ent.setPositionAndUpdate(
+							((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+									.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerx),
+							((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+									.orElse(new PocketDimentionsModVariables.PlayerVariables())).playery),
+							((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+									.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerz));
+					if (_ent instanceof ServerPlayerEntity) {
+						((ServerPlayerEntity) _ent).connection.setPlayerLocation(
 								((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 										.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerx),
 								((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 										.orElse(new PocketDimentionsModVariables.PlayerVariables())).playery),
 								((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-										.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerz));
-						if (_ent instanceof ServerPlayerEntity) {
-							((ServerPlayerEntity) _ent).connection.setPlayerLocation(
-									((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-											.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerx),
-									((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-											.orElse(new PocketDimentionsModVariables.PlayerVariables())).playery),
-									((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-											.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerz),
-									_ent.rotationYaw, _ent.rotationPitch, Collections.emptySet());
-						}
+										.orElse(new PocketDimentionsModVariables.PlayerVariables())).playerz),
+								_ent.rotationYaw, _ent.rotationPitch, Collections.emptySet());
 					}
-					{
-						boolean _setval = (boolean) (false);
-						entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-							capability.timer = _setval;
-							capability.syncPlayerVariables(entity);
-						});
-					}
+				}
+				{
+					boolean _setval = (boolean) (false);
+					entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+						capability.timer = _setval;
+						capability.syncPlayerVariables(entity);
+					});
 				}
 			}
 		} else if ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new PocketDimentionsModVariables.PlayerVariables())).timer == false) {
-			if (entity instanceof PlayerEntity && !entity.world.isRemote()) {
-				((PlayerEntity) entity).sendStatusMessage(new StringTextComponent("Please wait 20 seconds"), (true));
-			}
-			while ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.orElse(new PocketDimentionsModVariables.PlayerVariables())).number > 0) {
+			for (int index0 = 0; index0 < (int) (20); index0++) {
 				new Object() {
 					private int ticks = 0;
 					private float waitTicks;
