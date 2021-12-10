@@ -63,6 +63,15 @@
           }
         ]
       }
+    },
+    {
+      "name": "Keyblock",
+      "type": "block",
+      "sortid": 4,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "registry_name": "keyblock"
     }
   ],
   "variable_elements": [
@@ -77,6 +86,7 @@
   "language_map": {
     "en_us": {
       "item.pocket_dimentions.pocket": "Pocket Portal ",
+      "block.pocket_dimentions.keyblock": "Keyblock",
       "item.pocket_dimentions.dimention": "Pocket Hole"
     }
   },

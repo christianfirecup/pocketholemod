@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "up": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "north": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "east": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "south": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "west": "pocket_dimentions:blocks/iten_block_de_redstone",
+    "particle": "pocket_dimentions:blocks/iten_block_de_redstone"
+  }
+}
