@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "pocket_dimentions:items/the_eye_of_the_devil"
+    "layer0": "pocket_dimentions:items/pocketportal"
   }
 }

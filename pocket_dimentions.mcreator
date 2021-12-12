@@ -28,8 +28,8 @@
             "type": "entity"
           },
           {
-            "name": "world",
-            "type": "world"
+            "name": "itemstack",
+            "type": "itemstack"
           }
         ]
       }

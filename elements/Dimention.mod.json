@@ -3,7 +3,7 @@
   "_type": "item",
   "definition": {
     "renderType": 0,
-    "texture": "the_eye_of_the_devil",
+    "texture": "pocketportal",
     "customModelName": "Normal",
     "name": "Pocket Hole",
     "rarity": "COMMON",
