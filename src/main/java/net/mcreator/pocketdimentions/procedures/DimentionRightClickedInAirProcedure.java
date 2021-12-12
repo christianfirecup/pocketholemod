@@ -1,16 +1,18 @@
 package net.mcreator.pocketdimentions.procedures;
 
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.IWorld;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Util;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
 import net.minecraft.network.play.server.SPlaySoundEventPacket;
@@ -131,55 +133,56 @@ public class DimentionRightClickedInAirProcedure {
 			}
 		} else if ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new PocketDimentionsModVariables.PlayerVariables())).timer == false) {
-			for (int index0 = 0; index0 < (int) (20); index0++) {
-				new Object() {
-					private int ticks = 0;
-					private float waitTicks;
-					private IWorld world;
-
-					public void start(IWorld world, int waitTicks) {
-						this.waitTicks = waitTicks;
-						MinecraftForge.EVENT_BUS.register(this);
-						this.world = world;
-					}
-
-					@SubscribeEvent
-					public void tick(TickEvent.ServerTickEvent event) {
-						if (event.phase == TickEvent.Phase.END) {
-							this.ticks += 1;
-							if (this.ticks >= this.waitTicks)
-								run();
-						}
-					}
-
-					private void run() {
-						{
-							double _setval = (double) ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-									.orElse(new PocketDimentionsModVariables.PlayerVariables())).number - 1);
-							entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-								capability.number = _setval;
-								capability.syncPlayerVariables(entity);
-							});
-						}
-						MinecraftForge.EVENT_BUS.unregister(this);
-					}
-				}.start(world, (int) 20);
-			}
 			if ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.orElse(new PocketDimentionsModVariables.PlayerVariables())).number == 0) {
-				{
-					double _setval = (double) 20;
-					entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.number = _setval;
-						capability.syncPlayerVariables(entity);
-					});
+					.orElse(new PocketDimentionsModVariables.PlayerVariables())).clickedonce == false) {
+				while ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+						.orElse(new PocketDimentionsModVariables.PlayerVariables())).number > 0) {
+					{
+						double _setval = (double) ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+								.orElse(new PocketDimentionsModVariables.PlayerVariables())).number - 1);
+						entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+							capability.number = _setval;
+							capability.syncPlayerVariables(entity);
+						});
+					}
 				}
 				{
 					boolean _setval = (boolean) (true);
 					entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.timer = _setval;
+						capability.clickedonce = _setval;
 						capability.syncPlayerVariables(entity);
 					});
+				}
+				if ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+						.orElse(new PocketDimentionsModVariables.PlayerVariables())).number == 0) {
+					{
+						double _setval = (double) 400;
+						entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+							capability.number = _setval;
+							capability.syncPlayerVariables(entity);
+						});
+					}
+					{
+						boolean _setval = (boolean) (true);
+						entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+							capability.timer = _setval;
+							capability.syncPlayerVariables(entity);
+						});
+					}
+					{
+						boolean _setval = (boolean) (false);
+						entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+							capability.clickedonce = _setval;
+							capability.syncPlayerVariables(entity);
+						});
+					}
+				}
+			} else if ((entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+					.orElse(new PocketDimentionsModVariables.PlayerVariables())).clickedonce == true) {
+				if (!world.isRemote()) {
+					MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
+					if (mcserv != null)
+						mcserv.getPlayerList().func_232641_a_(new StringTextComponent("wait"), ChatType.SYSTEM, Util.DUMMY_UUID);
 				}
 			}
 		}

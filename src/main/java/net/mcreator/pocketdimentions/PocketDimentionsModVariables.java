@@ -220,6 +220,7 @@ public class PocketDimentionsModVariables {
 			nbt.putDouble("playerz", instance.playerz);
 			nbt.putBoolean("timer", instance.timer);
 			nbt.putDouble("number", instance.number);
+			nbt.putBoolean("clickedonce", instance.clickedonce);
 			return nbt;
 		}
 
@@ -231,6 +232,7 @@ public class PocketDimentionsModVariables {
 			instance.playerz = nbt.getDouble("playerz");
 			instance.timer = nbt.getBoolean("timer");
 			instance.number = nbt.getDouble("number");
+			instance.clickedonce = nbt.getBoolean("clickedonce");
 		}
 	}
 
@@ -240,6 +242,7 @@ public class PocketDimentionsModVariables {
 		public double playerz = 0;
 		public boolean timer = false;
 		public double number = 0;
+		public boolean clickedonce = false;
 
 		public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayerEntity)
@@ -280,6 +283,7 @@ public class PocketDimentionsModVariables {
 			clone.playerz = original.playerz;
 			clone.timer = original.timer;
 			clone.number = original.number;
+			clone.clickedonce = original.clickedonce;
 		}
 	}
 
@@ -310,6 +314,7 @@ public class PocketDimentionsModVariables {
 					variables.playerz = message.data.playerz;
 					variables.timer = message.data.timer;
 					variables.number = message.data.number;
+					variables.clickedonce = message.data.clickedonce;
 				}
 			});
 			context.setPacketHandled(true);

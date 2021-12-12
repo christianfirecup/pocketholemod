@@ -44,7 +44,7 @@ public class SetsProcedure {
 			});
 		}
 		{
-			double _setval = (double) 20;
+			double _setval = (double) 400;
 			entity.getCapability(PocketDimentionsModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
 				capability.number = _setval;
 				capability.syncPlayerVariables(entity);

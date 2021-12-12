@@ -79,9 +79,9 @@ public class PocketPlayerEntersDimensionProcedure {
 		} else if (PocketDimentionsModVariables.WorldVariables.get(world).firstenter == true) {
 			{
 				Entity _ent = entity;
-				_ent.setPositionAndUpdate(0, 5, 0);
+				_ent.setPositionAndUpdate(0, 2, 0);
 				if (_ent instanceof ServerPlayerEntity) {
-					((ServerPlayerEntity) _ent).connection.setPlayerLocation(0, 5, 0, _ent.rotationYaw, _ent.rotationPitch, Collections.emptySet());
+					((ServerPlayerEntity) _ent).connection.setPlayerLocation(0, 2, 0, _ent.rotationYaw, _ent.rotationPitch, Collections.emptySet());
 				}
 			}
 			if (!world.isRemote()) {
